@@ -29,7 +29,10 @@ class Error:
         return result
 
 class IllegalCharError(Error):
-    def __init__(self,pos_start,pos_end,details):
+    def __init__(self,pos_start=1,pos_end=5,details=' '):
+        super().__init__(pos_start,pos_end,"illegalCharError",details)
+class IllegalSyntexError(Error):
+    def __init__(self,pos_start=1,pos_end=5,details=''):
         super().__init__(pos_start,pos_end,"illegalCharError",details)
 
 
@@ -177,6 +180,8 @@ class Parser:
     
     
     
+
+    ###This is  a reccursive approach :
     def term(self):
         return self.BinaryOps(self.factor,(TT_DIV,TT_MUL))
     
@@ -193,6 +198,46 @@ class Parser:
             left=BinOperationNode(left,op_Node,right)
         return left
     
+
+
+
+###This is a much simpler version .Here I was actually trying to make it a lot more simpler that's all by the way:
+
+    # def term(self):
+    #     left=self.factor()
+
+    #     while self.curr_Token.type in (TT_DIV,TT_MUL):
+    #         op_Node=self.curr_Token
+    #         self.advance()
+    #         right=self.factor()
+    #         left=BinOperationNode(left,op_Node,right)
+    #     return left
+    
+
+    # def expr(self):
+    #     left=self.term()
+
+    #     while self.curr_Token.type in (TT_PLUS,TT_MINUS):
+    #         op_Node=self.curr_Token
+    #         self.advance()
+    #         right=self.term()
+    #         left=BinOperationNode(left,op_Node,right)
+    #     return left
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def parse(self):
         
         

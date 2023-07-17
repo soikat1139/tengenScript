@@ -1,5 +1,7 @@
 import lexer
 from pyfiglet import Figlet
+from parser_1 import Parser
+from interpreter import Interpreter
 
 
 RED = '\033[91m'
@@ -27,5 +29,9 @@ while True:
     else:
         print(tokens)
   
-        print(lexer.Parser(tokens).parse())
+        # print(lexer.Parser(tokens).parse())
+        # print(Parser(tokens).parse())
+        parsedRes=Parser(tokens).parse()
+        res=Interpreter().recursive_Calc(parsedRes)
+        print(res)
 

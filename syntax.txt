@@ -2,4 +2,6 @@
 expr   : term((plus|minus)term)*
 term   : factor((mul|div)factor)*
 factor : number | (plus|minus)factor | LPAREN expr RPAREN
+
+      :(PLLUS | MINUS)
 ```
