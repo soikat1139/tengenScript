@@ -1,3 +1,9 @@
+from interpreter import Interpreter
+import string
+
+
+
+
 
 TT_INT="INT"
 TT_FLOAT="FLOAT"
@@ -8,13 +14,29 @@ TT_DIV="DIV"
 TT_LPAREN="LPAREN"
 TT_RPAREN="RPAREN"
 DIGITS="0123456789."
+TT_IDENTIFIER="IDENTIFIER"
+TT_EQ="EQUAL"
+TT_KEYWORD="KEYWORD"
+KEYWORDS={
+    "Yuji",
+    "yuji",
+    
+}
+
+LETTERS=string.ascii_letters
+LETTERS_DIGITS=LETTERS+DIGITS
 
 
 
 
 
+memory={}
 
 
+class Test:
+    def __init__(self,type,value):
+        self.type=type
+        self.value=value
 
 
 class NumberNode:
@@ -47,7 +69,9 @@ class Parser:
         self.tokens=tokens
         self.token_pos=-1
         self.curr_Token=None
-        
+        self.memory={}
+        self.curr_ID=None
+        self.visit=1
         self.advance()
     def advance(self):
         self.token_pos+=1
@@ -63,6 +87,12 @@ class Parser:
 
     def factor(self):
         tok=self.curr_Token
+
+        if tok.type==TT_IDENTIFIER:
+            digit=memory[tok.value]
+            tok2=Test("INT",digit)
+            self.advance()
+            return NumberNode(tok2)
 
         if tok.type==TT_LPAREN:
             self.advance()
@@ -91,6 +121,27 @@ class Parser:
         return self.BinaryOps(self.factor,(TT_DIV,TT_MUL))
     
     def expr(self):
+
+        if self.curr_Token.type==TT_IDENTIFIER:
+            return self.BinaryOps(self.term,(TT_PLUS,TT_MINUS))
+        
+        if self.curr_Token.matches("KEYWORD","save"):
+            self.advance()
+            if self.curr_Token.type==TT_IDENTIFIER:
+                self.curr_ID=self.curr_Token.value
+                memory[self.curr_ID]=0
+                self.advance()
+                self.advance()
+                self.visit+=1
+                expr=self.expr()
+                memory[self.curr_ID]=Interpreter().recursive_Calc(expr)
+
+                
+                return expr
+
+
+
+        
         return self.BinaryOps(self.term,(TT_PLUS,TT_MINUS))
 
     def BinaryOps(self,func,Operator):
@@ -144,6 +195,11 @@ class Parser:
 
 
     def parse(self):
+
+
+
+
+
         
         
         res=self.expr()

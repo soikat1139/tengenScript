@@ -1,5 +1,8 @@
 
 
+import string
+
+
 
 
 ####tHIS Projecct is great to learn Object Oriented Programming:::
@@ -15,6 +18,18 @@ TT_DIV="DIV"
 TT_LPAREN="LPAREN"
 TT_RPAREN="RPAREN"
 DIGITS="0123456789."
+TT_IDENTIFIER="IDENTIFIER"
+TT_EQ="EQUAL"
+TT_KEYWORD="KEYWORD"
+KEYWORDS={
+    "Yuji",
+    "yuji",
+    "save"
+    
+}
+
+LETTERS=string.ascii_letters
+LETTERS_DIGITS=LETTERS+DIGITS
 
 
 class Error:
@@ -60,6 +75,8 @@ class Token:
     def __init__(self,type_,value=None):
         self.type=type_
         self.value=value
+    def matches(self,keyword,value):
+        return keyword==self.type and self.value==value
     def __repr__(self):
         if self.value:
             return f"{self.type}:{self.value}"
@@ -83,7 +100,7 @@ class Lexer:
 
         while self.current_char !=None:
             if self.current_char in " ":
-                self.advance(self.current_char)
+                self.advance()
 
             elif self.current_char=="+":
                 tokens.append(Token(TT_PLUS))
@@ -103,8 +120,13 @@ class Lexer:
             elif self.current_char==")":
                 tokens.append(Token(TT_RPAREN))
                 self.advance()
+            elif self.current_char=="=":
+                tokens.append(Token(TT_EQ))
+                self.advance()
             elif self.current_char in DIGITS:
                 tokens.append(self.makeDigits())
+            elif self.current_char in LETTERS:
+                tokens.append(self.makeIdentifier())
                 
             else:
                 pos_start=self.pos.copy()
@@ -114,6 +136,19 @@ class Lexer:
                 return [],IllegalCharError(pos_start,self.pos,char).as_string()
        
         return tokens,None
+    
+
+    def makeIdentifier(self):
+        str=""
+
+        while self.current_char!=None and self.current_char in LETTERS_DIGITS:
+            str+=self.current_char
+            self.advance()
+        
+        tok_type=TT_KEYWORD if str in KEYWORDS else TT_IDENTIFIER
+
+        return Token(tok_type,str)
+
     
     def makeDigits(self):
         nums=""

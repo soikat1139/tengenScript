@@ -27,9 +27,9 @@ class Interpreter:
         #     return node.token.value
         if node.name=="UnaryOpNode":
             if node.op_token=="PLUS":
-                return node.token.token.value
+                return self.recursive_Calc(node.token)
             else:
-                return -node.token.token.value
+                return -self.recursive_Calc(node.token)
 
        
         
