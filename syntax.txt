@@ -5,3 +5,9 @@ factor : number | (plus|minus)factor | LPAREN expr RPAREN
 
       :(PLLUS | MINUS)
 ```
+
+##All these seems too much academic.It's not a research paper so  let's use simple words .So here is my approach:
+
+===>Fist of all I created a Token class which receive all the text inputted in the terminal .Then  analyze them one by one and add them as a tokens list
+
+===>

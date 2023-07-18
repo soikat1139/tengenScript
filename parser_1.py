@@ -35,11 +35,12 @@ class BinOperationNode:
     def __repr__(self):
         return f"({self.leftNode},{self.OpsNode},{self.rightNode})"
 class UnaryOperationNode:
+    name="UnaryOpNode"
     def __init__(self,op_token,node):
         self.op_token=op_token
-        self.node=node
+        self.token=node
     def __repr__(self):
-        return f"({self.op_token},{self.node})"
+        return f"({self.op_token},{self.token})"
 
 class Parser:
     def __init__(self,tokens):
@@ -63,9 +64,20 @@ class Parser:
     def factor(self):
         tok=self.curr_Token
 
-        # if tok.type in (TT_INT,TT_PLUS):
-        #     self.advance()
-        #     return UnaryOperationNode()
+        if tok.type==TT_LPAREN:
+            self.advance()
+            exppr=self.expr()
+            if self.curr_Token.type==TT_RPAREN:
+                self.advance()
+                return exppr
+            else:
+                pass
+
+        if tok.type in (TT_MINUS,TT_PLUS):
+            ops_token=tok
+            self.advance()
+            factor=self.factor()
+            return UnaryOperationNode(ops_token,factor)
         
         if tok.type in (TT_INT,TT_FLOAT):
             self.advance()

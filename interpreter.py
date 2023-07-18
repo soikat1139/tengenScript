@@ -25,6 +25,12 @@ class Interpreter:
             return node.token.value
         # if node.leftNode==None and node.rightNode==None:
         #     return node.token.value
+        if node.name=="UnaryOpNode":
+            if node.op_token=="PLUS":
+                return node.token.token.value
+            else:
+                return -node.token.token.value
+
        
         
         if node.OpsNode.type==TT_PLUS:
