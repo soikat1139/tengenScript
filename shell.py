@@ -25,13 +25,13 @@ while True:
     newLexer=lexer.Lexer("<Terminal>",text)
     tokens,error=newLexer.make_tokens()
     if error:
-        print(F"{RED} {error} {RESET}")
+        print(f"{RED} {error} {RESET}")
     else:
         print(tokens)
   
-        print(lexer.Parser(tokens).parse())
+        # print(lexer.Parser(tokens).parse())
         print(Parser(tokens).parse())
-        parsedRes=Parser(tokens).parse()
-        res=Interpreter().recursive_Calc(parsedRes)
-        print(res)
+        # parsedRes=Parser(tokens).parse()
+        # res=Interpreter().recursive_Calc(parsedRes)
+        # print(res)
 

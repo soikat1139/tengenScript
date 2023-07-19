@@ -22,14 +22,20 @@ TT_GTE="GTE"
 TT_LTE="LTE"
 TT_NE="NE"
 
-KEYWORDS={
+KEYWORDS=[
     "Yuji",
     "yuji",
     "save",
     "and",
-    "or"
-    
-}
+    "or",
+    "if",
+    "then",
+    "elif",
+    "else",
+    "display",
+    "tengen",
+    "creator"
+]
 
 LETTERS=string.ascii_letters
 LETTERS_DIGITS=LETTERS+DIGITS
@@ -68,6 +74,15 @@ class UnaryOperationNode:
         self.token=node
     def __repr__(self):
         return f"({self.op_token},{self.token})"
+    
+class IfNode:
+    name="if_Node"
+    def __init__(self,cases,else_case):
+        self.cases=cases
+        self.else_case=else_case
+    # def __repr__(self):
+    #     return (f"{self.cases} and {self.else_case}")
+
 
 class Parser:
     def __init__(self,tokens):
@@ -134,7 +149,52 @@ class Parser:
     def comp_expr(self):
         return self.BinaryOps(self.arith_expr,(TT_EE,TT_GT,TT_GTE,TT_LT,TT_LTE,TT_NE))
     
+
+    def if_expr(self):
+        cases=[]
+        else_case=None
+        self.advance()
+
+        condition=self.expr()
+
+        if not self.curr_Token.matches("KEYWORD","then"):
+            print("Look's Like you haven't included 'then' keyword this may end up in an unexpected result")
+        self.advance()
+        expr=self.expr()
+
+        cases.append((condition,expr))
+
+        while self.curr_Token.matches(TT_KEYWORD,"elif"):
+            self.advance()
+            condition=self.expr()
+            if not self.curr_Token.matches("KEYWORD","then"):
+                print("Look's Like you haven't included 'then' keyword this may end up in an unexpected result")
+            self.advance()
+
+            expr=self.expr()
+
+            cases.append((condition,expr))
+        if self.curr_Token.matches(TT_KEYWORD,"else"):
+            self.advance()
+
+            expr=self.expr()
+
+            else_case=expr
+        
+        print(cases)
+        print(else_case)
+        return IfNode(cases,else_case)
+
+            
+
+
+
+    
     def expr(self):
+
+        if self.curr_Token.matches("KEYWORD","if"):
+            if_expr=self.if_expr()
+            return if_expr()
 
         if self.curr_Token.type==TT_IDENTIFIER:
             return self.BinaryOps(self.term,(TT_PLUS,TT_MINUS))

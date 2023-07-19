@@ -19,14 +19,20 @@ TT_GTE="GTE"
 TT_LTE="LTE"
 TT_NE="NE"
 
-KEYWORDS={
+KEYWORDS=[
     "Yuji",
     "yuji",
     "save",
     "and",
-    "or"
-    
-}
+    "or",
+    "if",
+    "then",
+    "elif",
+    "else",
+    "display",
+    "tengen",
+    "creator"
+]
 
 LETTERS=string.ascii_letters
 LETTERS_DIGITS=LETTERS+DIGITS
