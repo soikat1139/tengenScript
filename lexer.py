@@ -168,6 +168,7 @@ class Lexer:
             tok_type=TT_EE
         else:
             self.bounceback()
+
         return Token(tok_type)
     
     def not_maker(self):
@@ -183,6 +184,9 @@ class Lexer:
 
         if self.current_char=="=":
             tok_type=TT_LTE
+        else:
+            self.bounceback()
+
         return Token(tok_type)
     def gt_maker(self):
         tok_type=TT_GT
@@ -191,6 +195,8 @@ class Lexer:
 
         if self.current_char=="=":
             tok_type=TT_GTE
+        else:
+            self.bounceback()
         return Token(tok_type)
     
 

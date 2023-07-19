@@ -29,9 +29,9 @@ while True:
     else:
         print(tokens)
   
-        # print(lexer.Parser(tokens).parse())
-        # print(Parser(tokens).parse())
-        # parsedRes=Parser(tokens).parse()
-        # res=Interpreter().recursive_Calc(parsedRes)
-        # print(res)
+        print(lexer.Parser(tokens).parse())
+        print(Parser(tokens).parse())
+        parsedRes=Parser(tokens).parse()
+        res=Interpreter().recursive_Calc(parsedRes)
+        print(res)
 

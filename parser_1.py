@@ -131,6 +131,15 @@ class Parser:
     def term(self):
         return self.BinaryOps(self.factor,(TT_DIV,TT_MUL))
     
+
+    def arith_expr(self):
+        return self.BinaryOps(self.term,(TT_PLUS,TT_MINUS))
+    
+
+
+    def comp_expr(self):
+        return self.BinaryOps(self.arith_expr,(TT_EE,TT_GT,TT_GTE,TT_LT,TT_LTE,TT_NE))
+    
     def expr(self):
 
         if self.curr_Token.type==TT_IDENTIFIER:
@@ -153,12 +162,12 @@ class Parser:
 
 
         
-        return self.BinaryOps(self.term,(TT_PLUS,TT_MINUS))
+        return self.BinaryOps(self.comp_expr,((TT_KEYWORD,"and"),(TT_KEYWORD,"or")))
 
     def BinaryOps(self,func,Operator):
         left=func()
 
-        while self.curr_Token.type in Operator:
+        while self.curr_Token.type in Operator or (self.curr_Token.type,self.curr_Token.value) in Operator:
             op_Node=self.curr_Token
             self.advance()
             right=func()
