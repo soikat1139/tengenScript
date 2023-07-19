@@ -22,13 +22,22 @@ This programming Language is made just simply out of curiosity.
 ##Here is How you use can Use it:
 
    ==>You can use it in your terminal or command prompt
+
    ==>I am adding replit link so you can use it in your browser
+
    ==>It support's all the arithmetics and logical operators
+
    ==>Try calculating 2+2 or 2*2 or 2/2 or 2-2
+
    ==> Or complex operations like 2+2*2/2-2
+
    ==>You can also parenthesis to make it more complex like (2+2)*2/2-2
+
    ==>Unary operators are also supported like -2 or +2 or --2 or ++2 
-    ==>You can also use variables like a=2 or b=2 or c=a+b or d=a*b or e=a/b or f=a-b
-    ==>You can simply type your declared variables to see the value of it like a or b or c or d or e or f
-    ==>You can also use logical operators like a==b or a!=b or a>b or a<b or a>=b or a<=b
+
+   ==>You can also use variables like a=2 or b=2 or c=a+b or d=a*b or e=a/b or f=a-b
+
+   ==>You can simply type your declared variables to see the value of it like a or b or c or d or e or f
+
+   ==>You can also use logical operators like a==b or a!=b or a>b or a<b or a>=b or a<=b
    
