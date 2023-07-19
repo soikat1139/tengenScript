@@ -55,6 +55,22 @@ class Interpreter:
                 return self.recursive_Calc(node.token)
             else:
                 return -self.recursive_Calc(node.token)
+            
+        
+        if node.name=="IfNode":
+
+            for condition,expr in node.cases:
+                condition_value=self.recursive_Calc(condition)
+
+                if condition_value==True:
+                    expr_value=self.recursive_Calc(expr)
+                    return expr_value
+                
+            if node.else_cases:
+                else_value=self.recursive_Calc(node.else_case)
+                return else_value
+            
+            return None
 
        
         

@@ -76,12 +76,12 @@ class UnaryOperationNode:
         return f"({self.op_token},{self.token})"
     
 class IfNode:
-    name="if_Node"
+    name="IfNode"
     def __init__(self,cases,else_case):
         self.cases=cases
         self.else_case=else_case
-    # def __repr__(self):
-    #     return (f"{self.cases} and {self.else_case}")
+    def __repr__(self):
+        return (f"{self.cases} and {self.else_case}")
 
 
 class Parser:
@@ -181,8 +181,8 @@ class Parser:
 
             else_case=expr
         
-        print(cases)
-        print(else_case)
+        # print(cases)
+        # print(else_case)
         return IfNode(cases,else_case)
 
             
@@ -194,7 +194,7 @@ class Parser:
 
         if self.curr_Token.matches("KEYWORD","if"):
             if_expr=self.if_expr()
-            return if_expr()
+            return if_expr
 
         if self.curr_Token.type==TT_IDENTIFIER:
             return self.BinaryOps(self.term,(TT_PLUS,TT_MINUS))
