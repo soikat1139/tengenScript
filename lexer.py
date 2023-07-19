@@ -21,10 +21,19 @@ DIGITS="0123456789."
 TT_IDENTIFIER="IDENTIFIER"
 TT_EQ="EQUAL"
 TT_KEYWORD="KEYWORD"
+TT_EE="EE"
+TT_GT="GT"
+TT_LT="LT"
+TT_GTE="GTE"
+TT_LTE="LTE"
+TT_NE="NE"
+
 KEYWORDS={
     "Yuji",
     "yuji",
-    "save"
+    "save",
+    "and",
+    "or"
     
 }
 
@@ -95,6 +104,9 @@ class Lexer:
     def advance(self):
         self.pos.advance( self.current_char)
         self.current_char=self.text[self.pos.idx] if self.pos.idx<len(self.text) else None
+    def bounceback(self):
+        self.pos.idx-=1
+        self.current_char=self.text[self.pos.idx]
     def make_tokens(self):
         tokens=[]
 
@@ -121,7 +133,16 @@ class Lexer:
                 tokens.append(Token(TT_RPAREN))
                 self.advance()
             elif self.current_char=="=":
-                tokens.append(Token(TT_EQ))
+                tokens.append(self.eq_maker())
+                self.advance()
+            elif self.current_char=="<":
+                tokens.append(self.lt_maker())
+                self.advance()
+            elif self.current_char==">":
+                tokens.append(self.gt_maker())
+                self.advance()
+            elif self.current_char=="!":
+                tokens.append(self.not_maker())
                 self.advance()
             elif self.current_char in DIGITS:
                 tokens.append(self.makeDigits())
@@ -137,6 +158,42 @@ class Lexer:
        
         return tokens,None
     
+
+    def eq_maker(self):
+        tok_type=TT_EQ
+
+        self.advance()
+
+        if self.current_char=="=":
+            tok_type=TT_EE
+        else:
+            self.bounceback()
+        return Token(tok_type)
+    
+    def not_maker(self):
+        self.advance()
+
+        if self.current_char=="=":
+            return Token(TT_NE)
+        
+    def lt_maker(self):
+        tok_type=TT_LT
+
+        self.advance()
+
+        if self.current_char=="=":
+            tok_type=TT_LTE
+        return Token(tok_type)
+    def gt_maker(self):
+        tok_type=TT_GT
+
+        self.advance()
+
+        if self.current_char=="=":
+            tok_type=TT_GTE
+        return Token(tok_type)
+    
+
 
     def makeIdentifier(self):
         str=""

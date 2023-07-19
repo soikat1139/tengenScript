@@ -5,6 +5,7 @@ import string
 
 
 
+
 TT_INT="INT"
 TT_FLOAT="FLOAT"
 TT_PLUS="PLUS"
@@ -17,9 +18,19 @@ DIGITS="0123456789."
 TT_IDENTIFIER="IDENTIFIER"
 TT_EQ="EQUAL"
 TT_KEYWORD="KEYWORD"
+TT_EE="EE"
+TT_GT="GT"
+TT_LT="LT"
+TT_GTE="GTE"
+TT_LTE="LTE"
+TT_NE="NE"
+
 KEYWORDS={
     "Yuji",
     "yuji",
+    "save",
+    "and",
+    "or"
     
 }
 
