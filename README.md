@@ -6,18 +6,27 @@ This programming Language is made just simply out of curiosity.
 
 ##What is TengenScript?
   ==> So basically the name Tengen came from japanese anime Jujutsu Kaisen
+
   ==> Tengen is a character in the anime and he is the strongest character in the anime
+
   ==> So I thought why not name my programming language after him
+
   ==> So I named it TengenScript
+
   ==>Tengen is eternal and he has all the power,knoweldge and wisdom from the past and future
+
   ==>The most interesting thing about programming language is that it's building structure is simply beautiful and compelling
+
   ==>I love all the logics and the it works
 
 ##What is the purpose of TengenScript?
   ==>I was studying data structures and algorithms and I was learning about how the computer works
+
   ==>So I thought let's implement all the things I have learned in a programming language
+
   ==>It's not like people gonna use it but it's just for fun and learning purpose
-    ==>I am still learning and I am not a pro in programming
+
+  ==>I am still learning and I am not a pro in programming
 
 ##Here is How you use can Use it:
 

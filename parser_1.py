@@ -3,9 +3,6 @@ import string
 
 
 
-
-
-
 TT_INT="INT"
 TT_FLOAT="FLOAT"
 TT_PLUS="PLUS"
@@ -36,9 +33,6 @@ KEYWORDS={
 
 LETTERS=string.ascii_letters
 LETTERS_DIGITS=LETTERS+DIGITS
-
-
-
 
 
 memory={}
@@ -200,28 +194,7 @@ class Parser:
     #         left=BinOperationNode(left,op_Node,right)
     #     return left
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def parse(self):
-
-
-
-
-
-        
-        
+    def parse(self):   
         res=self.expr()
         
         return res

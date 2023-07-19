@@ -1,8 +1,4 @@
-
-
 import string
-
-
 
 
 ####tHIS Projecct is great to learn Object Oriented Programming:::
@@ -322,23 +318,7 @@ class Parser:
     #         left=BinOperationNode(left,op_Node,right)
     #     return left
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def parse(self):
-        
-        
+    def parse(self): 
         res=self.expr()
         
         return res

@@ -1,12 +1,4 @@
-
-
-
 import string
-
-
-
-
-
 
 TT_INT="INT"
 TT_FLOAT="FLOAT"
