@@ -18,6 +18,7 @@ TT_LT="LT"
 TT_GTE="GTE"
 TT_LTE="LTE"
 TT_NE="NE"
+TT_QUOTE="QUOTE"
 
 KEYWORDS=[
     "Yuji",
@@ -31,7 +32,9 @@ KEYWORDS=[
     "else",
     "display",
     "tengen",
-    "creator"
+    "creator",
+    "copyright",
+    "Display"
 ]
 
 LETTERS=string.ascii_letters
@@ -48,8 +51,19 @@ class Interpreter:
         # print(node.OpsNode)
         if not node:
             return
+        
         if node.name=="number":
             return node.token.value
+        
+        if node.name=="string":
+            response=""
+
+            for nodes in node.token:
+                response+=nodes.value
+                response+=" "
+
+
+            return response
         # if node.leftNode==None and node.rightNode==None:
         #     return node.token.value
         if node.name=="UnaryOpNode":
@@ -67,12 +81,13 @@ class Interpreter:
                 if condition_value==True:
                     expr_value=self.recursive_Calc(expr)
                     return expr_value
-                
-            if node.else_cases:
+            
+          
+            if node.else_case:
                 else_value=self.recursive_Calc(node.else_case)
                 return else_value
             
-            return None
+            return "Nothing to show"
 
        
         

@@ -57,6 +57,11 @@
 
 
 
+
+
+##Lexical Analysis and Token Generation :
+
+
 import string
 
 
@@ -82,6 +87,7 @@ TT_LT="LT"
 TT_GTE="GTE"
 TT_LTE="LTE"
 TT_NE="NE"
+TT_QUOTE="QUOTE"
 
 KEYWORDS=[
     "Yuji",
@@ -95,13 +101,13 @@ KEYWORDS=[
     "else",
     "display",
     "tengen",
-    "creator"
+    "creator",
+    "copyright",
+    "Display"
 ]
 
 LETTERS=string.ascii_letters
 LETTERS_DIGITS=LETTERS+DIGITS
-
-memory={}
 
 
 class Error:
@@ -194,6 +200,9 @@ class Lexer:
                 self.advance()
             elif self.current_char==")":
                 tokens.append(Token(TT_RPAREN))
+                self.advance()
+            elif self.current_char=='"':
+                tokens.append(Token(TT_QUOTE))
                 self.advance()
             elif self.current_char=="=":
                 tokens.append(self.eq_maker())
@@ -300,6 +309,75 @@ class Lexer:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+######Parser and Node Tree Maker  :
+
+
+
+
+
+
+
+
+
+
+
+
+TT_INT="INT"
+TT_FLOAT="FLOAT"
+TT_PLUS="PLUS"
+TT_MINUS="MINUS"
+TT_MUL="MUL"
+TT_DIV="DIV"
+TT_LPAREN="LPAREN"
+TT_RPAREN="RPAREN"
+DIGITS="0123456789."
+TT_IDENTIFIER="IDENTIFIER"
+TT_EQ="EQUAL"
+TT_KEYWORD="KEYWORD"
+TT_EE="EE"
+TT_GT="GT"
+TT_LT="LT"
+TT_GTE="GTE"
+TT_LTE="LTE"
+TT_NE="NE"
+TT_QUOTE="QUOTE"
+
+KEYWORDS=[
+    "Yuji",
+    "yuji",
+    "save",
+    "and",
+    "or",
+    "if",
+    "then",
+    "elif",
+    "else",
+    "display",
+    "tengen",
+    "creator",
+    "copyright",
+    "Display"
+]
+
+LETTERS=string.ascii_letters
+LETTERS_DIGITS=LETTERS+DIGITS
+
+
+memory={}
+
+
 class Test:
     def __init__(self,type,value):
         self.type=type
@@ -315,6 +393,19 @@ class NumberNode:
         
     def __repr__(self):
         return f"({self.token})"
+    
+class StringNode:
+    name="string"
+    def __init__(self):
+        self.token=[]
+        self.leftNode=None
+        self.rightNode=None
+    
+    def addToken(self,token):
+        self.token.append(token)
+        
+    def __repr__(self):
+        return f"({self.token})"
 class BinOperationNode:
     name="Binary"
     def __init__(self,leftNode,OpsNode,rightNode):
@@ -323,6 +414,8 @@ class BinOperationNode:
         self.OpsNode=OpsNode
     def __repr__(self):
         return f"({self.leftNode},{self.OpsNode},{self.rightNode})"
+    
+
 class UnaryOperationNode:
     name="UnaryOpNode"
     def __init__(self,op_token,node):
@@ -330,6 +423,8 @@ class UnaryOperationNode:
         self.token=node
     def __repr__(self):
         return f"({self.op_token},{self.token})"
+    
+    
     
 class IfNode:
     name="IfNode"
@@ -420,6 +515,9 @@ class Parser:
 
         cases.append((condition,expr))
 
+        if not self.curr_Token:
+            return IfNode(cases,else_case)
+
         while self.curr_Token.matches(TT_KEYWORD,"elif"):
             self.advance()
             condition=self.expr()
@@ -448,9 +546,41 @@ class Parser:
     
     def expr(self):
 
+        if self.curr_Token.type==TT_QUOTE:
+            self.advance()
+
+            string=StringNode()
+
+            while not self.curr_Token.type==TT_QUOTE:
+                string.addToken(self.curr_Token)
+                self.advance()
+            
+            return string
+        
+        if self.curr_Token.matches("KEYWORD","creator"):
+            print("The Creator Of this programming Language Is Soikat Ahamed")
+            return 
+        if self.curr_Token.matches("KEYWORD","copyright"):
+            print("All rights reserved by  Soikat Ahamed")
+            return 
+
+
+
         if self.curr_Token.matches("KEYWORD","if"):
             if_expr=self.if_expr()
             return if_expr
+        
+        if self.curr_Token.matches("KEYWORD","display"):
+            self.advance()
+            self.advance()
+            print(self.curr_Token)
+            printExpr=self.expr()
+            self.advance()
+            print(printExpr)
+
+            return printExpr
+            
+            
 
         if self.curr_Token.type==TT_IDENTIFIER:
             return self.BinaryOps(self.term,(TT_PLUS,TT_MINUS))
@@ -514,7 +644,25 @@ class Parser:
         res=self.expr()
         
         return res
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###Interpreter The Main Section Of Programming Language:
+
+
+
+
 
 
 class Interpreter:
@@ -525,8 +673,21 @@ class Interpreter:
     def recursive_Calc(self,node):
         # print(node.leftNode.token.value)
         # print(node.OpsNode)
+        if not node:
+            return
+        
         if node.name=="number":
             return node.token.value
+        
+        if node.name=="string":
+            response=""
+
+            for nodes in node.token:
+                response+=nodes.value
+                response+=" "
+
+
+            return response
         # if node.leftNode==None and node.rightNode==None:
         #     return node.token.value
         if node.name=="UnaryOpNode":
@@ -544,12 +705,13 @@ class Interpreter:
                 if condition_value==True:
                     expr_value=self.recursive_Calc(expr)
                     return expr_value
-                
-            if node.else_cases:
+            
+          
+            if node.else_case:
                 else_value=self.recursive_Calc(node.else_case)
                 return else_value
             
-            return None
+            return "Nothing to show"
 
        
         
@@ -577,6 +739,23 @@ class Interpreter:
             return self.recursive_Calc(node.leftNode) or self.recursive_Calc(node.rightNode)
         
         
+
+
+
+
+
+
+###Displaying The result Of Programming Language Interpreter:
+
+
+
+
+
+
+
+
+
+
 
 RED = '\033[91m'
 RESET = '\033[0m'

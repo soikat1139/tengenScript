@@ -21,6 +21,7 @@ TT_LT="LT"
 TT_GTE="GTE"
 TT_LTE="LTE"
 TT_NE="NE"
+TT_QUOTE="QUOTE"
 
 KEYWORDS=[
     "Yuji",
@@ -34,7 +35,9 @@ KEYWORDS=[
     "else",
     "display",
     "tengen",
-    "creator"
+    "creator",
+    "copyright",
+    "Display"
 ]
 
 LETTERS=string.ascii_letters
@@ -59,6 +62,19 @@ class NumberNode:
         
     def __repr__(self):
         return f"({self.token})"
+    
+class StringNode:
+    name="string"
+    def __init__(self):
+        self.token=[]
+        self.leftNode=None
+        self.rightNode=None
+    
+    def addToken(self,token):
+        self.token.append(token)
+        
+    def __repr__(self):
+        return f"({self.token})"
 class BinOperationNode:
     name="Binary"
     def __init__(self,leftNode,OpsNode,rightNode):
@@ -67,6 +83,8 @@ class BinOperationNode:
         self.OpsNode=OpsNode
     def __repr__(self):
         return f"({self.leftNode},{self.OpsNode},{self.rightNode})"
+    
+
 class UnaryOperationNode:
     name="UnaryOpNode"
     def __init__(self,op_token,node):
@@ -74,6 +92,8 @@ class UnaryOperationNode:
         self.token=node
     def __repr__(self):
         return f"({self.op_token},{self.token})"
+    
+    
     
 class IfNode:
     name="IfNode"
@@ -164,6 +184,9 @@ class Parser:
 
         cases.append((condition,expr))
 
+        if not self.curr_Token:
+            return IfNode(cases,else_case)
+
         while self.curr_Token.matches(TT_KEYWORD,"elif"):
             self.advance()
             condition=self.expr()
@@ -191,6 +214,17 @@ class Parser:
 
     
     def expr(self):
+
+        if self.curr_Token.type==TT_QUOTE:
+            self.advance()
+
+            string=StringNode()
+
+            while not self.curr_Token.type==TT_QUOTE:
+                string.addToken(self.curr_Token)
+                self.advance()
+            
+            return string
         
         if self.curr_Token.matches("KEYWORD","creator"):
             print("The Creator Of this programming Language Is Soikat Ahamed")
@@ -198,12 +232,24 @@ class Parser:
         if self.curr_Token.matches("KEYWORD","copyright"):
             print("All rights reserved by  Soikat Ahamed")
             return 
-       
+
 
 
         if self.curr_Token.matches("KEYWORD","if"):
             if_expr=self.if_expr()
             return if_expr
+        
+        if self.curr_Token.matches("KEYWORD","display"):
+            self.advance()
+            self.advance()
+            print(self.curr_Token)
+            printExpr=self.expr()
+            self.advance()
+            print(printExpr)
+
+            return printExpr
+            
+            
 
         if self.curr_Token.type==TT_IDENTIFIER:
             return self.BinaryOps(self.term,(TT_PLUS,TT_MINUS))

@@ -23,6 +23,7 @@ TT_LT="LT"
 TT_GTE="GTE"
 TT_LTE="LTE"
 TT_NE="NE"
+TT_QUOTE="QUOTE"
 
 KEYWORDS=[
     "Yuji",
@@ -37,7 +38,8 @@ KEYWORDS=[
     "display",
     "tengen",
     "creator",
-    "copyright"
+    "copyright",
+    "Display"
 ]
 
 LETTERS=string.ascii_letters
@@ -134,6 +136,9 @@ class Lexer:
                 self.advance()
             elif self.current_char==")":
                 tokens.append(Token(TT_RPAREN))
+                self.advance()
+            elif self.current_char=='"':
+                tokens.append(Token(TT_QUOTE))
                 self.advance()
             elif self.current_char=="=":
                 tokens.append(self.eq_maker())
@@ -235,101 +240,5 @@ class Lexer:
         else:
             return Token("INT",int(nums))
         
-
-
-
-###Nimber Node
-
-class NumberNode:
-    def __init__(self,token):
-        self.token=token
-    def __repr__(self):
-        return f"{self.token}"
-class BinOperationNode:
-    def __init__(self,leftNode,OpsNode,rightNode):
-        self.leftNode=leftNode
-        self.rightNode=rightNode
-        self.OpsNode=OpsNode
-    def __repr__(self):
-        return f"({self.leftNode},{self.OpsNode},{self.rightNode})"
-
-class Parser:
-    def __init__(self,tokens):
-        self.tokens=tokens
-        self.token_pos=-1
-        self.curr_Token=None
-        
-        self.advance()
-    def advance(self):
-        self.token_pos+=1
-
-        if self.token_pos<len(self.tokens):
-            self.curr_Token=self.tokens[self.token_pos]
-            
-            
-            
-        return self.curr_Token
-    
-
-
-    def factor(self):
-        tok=self.curr_Token
-        
-        if tok.type in (TT_INT,TT_FLOAT):
-            self.advance()
-            return NumberNode(tok)
-    
-    
-    
-
-    ###This is  a reccursive approach :
-    def term(self):
-        return self.BinaryOps(self.factor,(TT_DIV,TT_MUL))
-    
-    def expr(self):
-        return self.BinaryOps(self.term,(TT_PLUS,TT_MINUS))
-
-    def BinaryOps(self,func,Operator):
-        left=func()
-
-        while self.curr_Token.type in Operator:
-            op_Node=self.curr_Token
-            self.advance()
-            right=func()
-            left=BinOperationNode(left,op_Node,right)
-        return left
-    
-
-
-
-###This is a much simpler version .Here I was actually trying to make it a lot more simpler that's all by the way:
-
-    # def term(self):
-    #     left=self.factor()
-
-    #     while self.curr_Token.type in (TT_DIV,TT_MUL):
-    #         op_Node=self.curr_Token
-    #         self.advance()
-    #         right=self.factor()
-    #         left=BinOperationNode(left,op_Node,right)
-    #     return left
-    
-
-    # def expr(self):
-    #     left=self.term()
-
-    #     while self.curr_Token.type in (TT_PLUS,TT_MINUS):
-    #         op_Node=self.curr_Token
-    #         self.advance()
-    #         right=self.term()
-    #         left=BinOperationNode(left,op_Node,right)
-    #     return left
-    
-    def parse(self): 
-        res=self.expr()
-        
-        return res
-
-    
 
 
