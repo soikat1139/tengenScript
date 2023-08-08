@@ -1,5 +1,35 @@
 ## Introduction About This Programming Language:
 
+##This Is an Interpreter for TengenScript Programming Language
+
+##This project has taught me a lot of things about recurrsion and binary tree
+##I have studied data structure and algorithms to be able to accomplish this project
+##Tengen is a character from Japanese Anime "Jujutsu Kaisen"
+
+##Here is the Syntax of the Language
+
+#let's start with printing "Hello World".Type on the terminal:
+# display("Hello World") or Display("Hello World")
+
+#To declare a variable :
+
+# save a=10 ; save name="Soikat" ; save temperature="30";display(a+temperature)
+
+#This language supports all kinds of mathematical Operations.For example:
+
+# display(10+50); display(--10); display((10+50)*3);display(20-20+5)
+
+#String concatination is also there:
+
+# save a="tengen"; save b="script"; display(a+b);save a="This is it"
+
+#To type if else statement:
+
+# if a>5 then display("a is greater") elif a<5 then display("a is less") else 
+# display("a is equal to 5")
+
+
+
 
 
 
@@ -204,6 +234,12 @@ class Lexer:
             elif self.current_char=='"':
                 tokens.append(Token(TT_QUOTE))
                 self.advance()
+            elif self.current_char=="'":
+                tokens.append(Token(TT_QUOTE))
+                self.advance()
+            elif self.current_char=="'":
+                tokens.append(Token(TT_QUOTE))
+                self.advance()              
             elif self.current_char=="=":
                 tokens.append(self.eq_maker())
                 self.advance()
@@ -224,6 +260,7 @@ class Lexer:
             else:
                 pos_start=self.pos.copy()
                 char=self.current_char
+                print(char=self.current_char)
                 self.advance()
 
                 return [],IllegalCharError(pos_start,self.pos,char).as_string()
@@ -573,10 +610,19 @@ class Parser:
         if self.curr_Token.matches("KEYWORD","display"):
             self.advance()
             self.advance()
-            print(self.curr_Token)
+            
             printExpr=self.expr()
             self.advance()
-            print(printExpr)
+            
+
+            return printExpr
+        if self.curr_Token.matches("KEYWORD","Display"):
+            self.advance()
+            self.advance()
+            
+            printExpr=self.expr()
+            self.advance()
+            
 
             return printExpr
             
@@ -746,6 +792,11 @@ class Interpreter:
 
 
 ###Displaying The result Of Programming Language Interpreter:
+from pyfiglet import Figlet
+
+
+
+
 
 
 
@@ -760,7 +811,6 @@ class Interpreter:
 RED = '\033[91m'
 RESET = '\033[0m'
 GREEN = '\033[92m'
-from pyfiglet import Figlet
  
 f = Figlet(font='slant')
 name = f.renderText('TengenScript')
@@ -781,10 +831,19 @@ while True:
     if error:
         print(f"{RED} {error} {RESET}")
     else:
-        print(tokens)
+        #print(tokens)
         # print(Parser(tokens).parse())
         parsedRes=Parser(tokens).parse()
+        if not parsedRes:
+             print(f"{RED} Something Might be Wrong {RESET}")
+             continue
+        
         res=Interpreter().recursive_Calc(parsedRes)
-        print(res)
+        if not res:
+            print(f"{RED} Something Might be Wrong {RESET}")
+            continue
 
+
+        print(res)
+      
     
