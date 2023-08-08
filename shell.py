@@ -9,8 +9,8 @@ RESET = '\033[0m'
 GREEN = '\033[92m'
  
 f = Figlet(font='slant')
-einstein = f.renderText('TengenScript')
-print(einstein)
+name = f.renderText('TengenScript')
+print(name)
 print("")
 print(f">This project is just to Learn  {RED}OOP{RESET}")
 print("")
@@ -28,9 +28,7 @@ while True:
         print(f"{RED} {error} {RESET}")
     else:
         print(tokens)
-  
-        # print(lexer.Parser(tokens).parse())
-        print(Parser(tokens).parse())
+        # print(Parser(tokens).parse())
         parsedRes=Parser(tokens).parse()
         res=Interpreter().recursive_Calc(parsedRes)
         print(res)
