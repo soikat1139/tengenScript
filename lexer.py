@@ -36,7 +36,8 @@ KEYWORDS=[
     "else",
     "display",
     "tengen",
-    "creator"
+    "creator",
+    "copyright"
 ]
 
 LETTERS=string.ascii_letters

@@ -191,6 +191,15 @@ class Parser:
 
     
     def expr(self):
+        
+        if self.curr_Token.matches("KEYWORD","creator"):
+            print("The Creator Of this programming Language Is Soikat Ahamed")
+            return 
+        if self.curr_Token.matches("KEYWORD","copyright"):
+            print("All rights reserved by  Soikat Ahamed")
+            return 
+       
+
 
         if self.curr_Token.matches("KEYWORD","if"):
             if_expr=self.if_expr()

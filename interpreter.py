@@ -46,6 +46,8 @@ class Interpreter:
     def recursive_Calc(self,node):
         # print(node.leftNode.token.value)
         # print(node.OpsNode)
+        if not node:
+            return
         if node.name=="number":
             return node.token.value
         # if node.leftNode==None and node.rightNode==None:
