@@ -24,6 +24,8 @@ TT_GTE="GTE"
 TT_LTE="LTE"
 TT_NE="NE"
 TT_QUOTE="QUOTE"
+TT_COMMA="COMMA"
+TT_ARROW="ARROW"
 
 KEYWORDS=[
     "Yuji",
@@ -39,7 +41,8 @@ KEYWORDS=[
     "tengen",
     "creator",
     "copyright",
-    "Display"
+    "Display",
+    "func"
 ]
 
 LETTERS=string.ascii_letters
@@ -123,7 +126,8 @@ class Lexer:
                 tokens.append(Token(TT_PLUS))
                 self.advance()
             elif self.current_char=="-":
-                tokens.append(Token(TT_MINUS))
+
+                tokens.append(self.minArrowmaker())
                 self.advance()
             elif self.current_char=="*":
                 tokens.append(Token(TT_MUL))
@@ -139,6 +143,12 @@ class Lexer:
                 self.advance()
             elif self.current_char=='"':
                 tokens.append(Token(TT_QUOTE))
+                self.advance()
+            elif self.current_char=="'":
+                tokens.append(Token(TT_QUOTE))
+                self.advance()
+            elif self.current_char==",":
+                tokens.append(Token(TT_COMMA))
                 self.advance()
             elif self.current_char=="=":
                 tokens.append(self.eq_maker())
@@ -165,6 +175,19 @@ class Lexer:
                 return [],IllegalCharError(pos_start,self.pos,char).as_string()
        
         return tokens,None
+    
+
+    def minArrowmaker(self):
+        tok_type=TT_MINUS
+
+        self.advance()
+
+        if self.current_char==">":
+            tok_type=TT_ARROW
+        else:
+            self.bounceback()
+            
+        return Token(tok_type)
     
 
     def eq_maker(self):

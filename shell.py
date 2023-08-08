@@ -28,7 +28,6 @@ while True:
         print(f"{RED} {error} {RESET}")
     else:
         print(tokens)
-        # print(Parser(tokens).parse())
         parsedRes=Parser(tokens).parse()
         if not parsedRes:
              print(f"{RED} Something Might be Wrong {RESET}")
@@ -38,7 +37,6 @@ while True:
         if not res:
             print(f"{RED} Something Might be Wrong {RESET}")
             continue
-
 
         print(res)
       

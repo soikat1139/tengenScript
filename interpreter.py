@@ -52,11 +52,17 @@ class Interpreter:
         if not node:
             return
         
+        if node.name=="funcNode":
+            return node
+        
         if node.name=="number":
             return node.token.value
         
         if node.name=="string":
             response=""
+
+            if len(node.token)==1:
+                return node.token[0].value
 
             for nodes in node.token:
                 response+=nodes.value

@@ -22,6 +22,8 @@ TT_GTE="GTE"
 TT_LTE="LTE"
 TT_NE="NE"
 TT_QUOTE="QUOTE"
+TT_COMMA="COMMA"
+TT_ARROW="ARROW"
 
 KEYWORDS=[
     "Yuji",
@@ -45,6 +47,8 @@ LETTERS_DIGITS=LETTERS+DIGITS
 
 
 memory={}
+
+memoryforFunc={}
 
 
 class Test:
@@ -75,6 +79,32 @@ class StringNode:
         
     def __repr__(self):
         return f"({self.token})"
+    
+
+class FuncNode:
+    name="funcNode"
+
+    def __init__(self,name,parameters,body):
+        self.funcName=name
+        self.parameters=parameters
+        self.body=body
+    
+    def __repr__(self):
+        return f"<Function {self.funcName if self.funcName else 'Anynomious'} >"
+    
+class Called:
+
+    name="funCall"
+
+    def __init__(self,name,args):
+        self.funcName=name
+        self.args=args
+
+    def __init__(self):
+        return f"{self.funcName} and {self.args}"
+
+
+
 class BinOperationNode:
     name="Binary"
     def __init__(self,leftNode,OpsNode,rightNode):
@@ -126,11 +156,43 @@ class Parser:
 
 
     def factor(self):
+
+              # if self.curr_Token.type==TT_QUOTE:
+        #     self.advance()
+
+        #     string=StringNode()
+
+        #     while not self.curr_Token.type==TT_QUOTE:
+        #         string.addToken(self.curr_Token)
+        #         self.advance()
+            
+        #     return string
+
+
         tok=self.curr_Token
 
+        if tok.type==TT_QUOTE:
+            self.advance()
+
+            string=StringNode()
+
+            while not self.curr_Token.type==TT_QUOTE:
+                string.addToken(self.curr_Token)
+                self.advance()
+
+            
+            self.advance()
+            
+            
+            return string
+
+
+
+
         if tok.type==TT_IDENTIFIER:
-            digit=memory[tok.value]
-            tok2=Test("INT",digit)
+
+            memoryValue=memory[tok.value]
+            tok2=Test("INT",memoryValue)
             self.advance()
             return NumberNode(tok2)
 
@@ -207,6 +269,10 @@ class Parser:
         # print(cases)
         # print(else_case)
         return IfNode(cases,else_case)
+    
+    
+    def term2(self):
+        return self.BinaryOps(self.factor,(TT_PLUS,TT_MINUS))
 
             
 
@@ -215,16 +281,72 @@ class Parser:
     
     def expr(self):
 
-        if self.curr_Token.type==TT_QUOTE:
+        # if self.curr_Token.type==TT_QUOTE:
+        #     self.advance()
+
+        #     string=StringNode()
+
+        #     while not self.curr_Token.type==TT_QUOTE:
+        #         string.addToken(self.curr_Token)
+        #         self.advance()
+            
+        #     return string
+        if self.curr_Token.matches("KEYWORD","func"):
+            
             self.advance()
 
-            string=StringNode()
+            funcName=self.curr_Token.value
 
-            while not self.curr_Token.type==TT_QUOTE:
-                string.addToken(self.curr_Token)
-                self.advance()
+            self.advance()
+            self.advance()
+            parameters=[]
+
             
-            return string
+
+       
+
+            while not self.curr_Token.type==TT_RPAREN:
+                if self.curr_Token.type==TT_COMMA:
+                    self.advance()
+                    continue
+                parameters.append(self.curr_Token)
+                self.advance()
+
+            
+            
+            self.advance()
+            self.advance()
+            funcBody=[]
+
+            while self.token_pos<len(self.tokens):
+                funcBody.append(self.curr_Token)
+                self.advance()
+
+            funcNode=FuncNode(funcName,parameters,funcBody)
+
+            # print(funcNode.body)
+            # print(funcNode.parameters)
+            # print(funcNode.funcName)
+
+            memoryforFunc[funcName]=funcNode
+
+            return funcNode
+           
+
+                
+
+
+
+
+            # parameters.append(self.curr_Token)
+
+            # self.advance()
+            # self.advance()
+            
+                    
+
+        if self.curr_Token.type==TT_QUOTE:
+            return self.BinaryOps(self.term2,(TT_MUL,TT_DIV))
         
         if self.curr_Token.matches("KEYWORD","creator"):
             print("The Creator Of this programming Language Is Soikat Ahamed")
@@ -252,7 +374,56 @@ class Parser:
             
 
         if self.curr_Token.type==TT_IDENTIFIER:
-            return self.BinaryOps(self.term,(TT_PLUS,TT_MINUS))
+            if self.curr_Token.value in memoryforFunc:
+                funcNode=memoryforFunc[self.curr_Token.value]
+
+                funcParameters=funcNode.parameters
+
+
+
+                self.advance()
+                self.advance()
+                i=0
+
+                
+
+
+                while not self.curr_Token.type==TT_RPAREN:
+                   if self.curr_Token.type==TT_COMMA:
+                      
+                      self.advance()
+                      continue
+                   
+                   if self.curr_Token.type==TT_QUOTE:
+                      
+                      self.advance()
+
+                      continue
+                   memory[funcParameters[i].value]=self.curr_Token.value
+                   i+=1
+                   
+                   
+
+                   self.advance()   
+
+                # print(memory)
+
+                self.advance()
+
+                funcBody=funcNode.body
+
+                parseResult=Parser(funcBody).parse()
+
+                # print(parseResult.leftNode) 
+
+
+
+
+                return parseResult
+             
+            else:
+                print("Hi")
+                return self.BinaryOps(self.term,(TT_PLUS,TT_MINUS))
         
         if self.curr_Token.matches("KEYWORD","save"):
             self.advance()
@@ -281,6 +452,8 @@ class Parser:
             self.advance()
             right=func()
             left=BinOperationNode(left,op_Node,right)
+        
+        
         return left
     
 
